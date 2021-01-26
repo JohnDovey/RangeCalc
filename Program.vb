@@ -7,7 +7,8 @@ Module Program
 		Dim refdistance As Integer ' distance between two ref points _ use %u for unsigned number
 		Dim rangetotarget As Double ' Calculated range
 		Dim tmpAngle As Integer
-
+ Console.writeline("Range Calculator - by John Dovey <dovey.john@gmail.com>")
+ console.writeline("View the code on GitHub [https://github.com/JohnDovey/RangeCalc]")
 		Console.Write(vbLf & vbLf & " Enter the values as prompted" & vbCrLf)
 
 		' Bearing One
