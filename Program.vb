@@ -2,10 +2,10 @@ Imports System
 
 Module Program
     Sub Main()
-		Dim bearing1 As Integer ' bearing from left ref point to target
-		Dim bearing2 As Integer ' bearing from right ref point to target
-		Dim refdistance As Integer ' distance between two ref points _ use %u for unsigned number
-		Dim rangetotarget As Double ' Calculated range
+		Dim Bearing1 As Integer ' bearing from left ref point to target
+		Dim Bearing2 As Integer ' bearing from right ref point to target
+		Dim RefDistance As Integer ' distance between two ref points _ use %u for unsigned number
+		Dim RangeToTarget As Double ' Calculated range
 		Dim tmpAngle As Integer
 		Dim OutTxt(2) As String
 		OutTxt(0) = "+------------------------------------------------------------------+"
@@ -17,48 +17,49 @@ Module Program
 		Console.WriteLine(OutTxt(0))
 
 
-		Console.Write(vbLf & vbLf & " Enter the values as prompted" & vbCrLf)
+		Console.WriteLine(vbLf & vbLf & " Enter the values as prompted")
 
 		' Bearing One
 		Console.Write("Bearing from Ref One to Target: ")
-		bearing1 = Console.ReadLine
-		Console.WriteLine(vbTab & "({0} degrees bearing Ref 1 to target) ", bearing1)
+		Bearing1 = Console.ReadLine
+		Console.WriteLine(vbTab & "({0} degrees bearing Ref 1 to target) ", Bearing1)
 
-		If bearing1 > 360 Then
+		If Bearing1 > 360 Then
 			Console.WriteLine("Error! No more than 360 Degrees allowed")
 			Exit Sub
 		End If
 
-		If bearing1 < 1 Then
+		If Bearing1 < 1 Then
 			Console.WriteLine("Error! Bearing must be greater than zero")
 			Exit Sub
 		End If
 		' Bearing Two
 		Console.Write("Bearing from Ref Two to Target: ")
-		bearing2 = Console.ReadLine
-		Console.WriteLine(vbTab & "({0} degrees bearing Ref 2 to target) ", bearing2)
+		Bearing2 = Console.ReadLine
 
-		If bearing2 > 360 Then
+		Console.WriteLine(vbTab & "({0} degrees bearing Ref 2 to target) ", Bearing2)
+
+		If Bearing2 > 360 Then
 			Console.WriteLine("Error! No more than 360 Degrees allowed")
 			Exit Sub
 		End If
-		If bearing2 < 1 Then
+		If Bearing2 < 1 Then
 			Console.WriteLine("Error! Bearing must be greater than zero")
 			Exit Sub
 		End If
 
 		' Seperation Distance
 		Console.Write("Distance between Ref One and Ref Two: ")
-		refdistance = Console.ReadLine
-		Console.WriteLine(vbTab & "({0} meters between reference points) ", refdistance)
+		RefDistance = Console.ReadLine
+		Console.WriteLine(vbTab & "({0} meters between reference points) ", RefDistance)
 
 		' d = (Tan (90 - (A -B))) x Ref
-		tmpAngle = bearing1 - bearing2
+		tmpAngle = Bearing1 - Bearing2
 		If tmpAngle < 0 Then
 			tmpAngle *= (0 - 1)
 		End If
-		rangetotarget = (Math.Tan(90 - tmpAngle)) * refdistance
-		Console.WriteLine("Range to Target: {0}", rangetotarget)
+		RangeToTarget = (Math.Tan(90 - tmpAngle)) * RefDistance
+		Console.WriteLine("Range to Target: {0}", RangeToTarget)
 		Console.Write("Hit a key (softly) to continue")
 		Console.ReadKey()
 
