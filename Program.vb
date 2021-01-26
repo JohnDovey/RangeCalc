@@ -50,6 +50,8 @@ Module Program
 		End If
 		rangetotarget = (Math.Tan(90 - tmpAngle)) * refdistance
 		Console.WriteLine("Range to Target: {0}", rangetotarget)
+		Console.Write("Hit a key to continue")
+		Console.ReadKey()
 
 	End Sub
 End Module

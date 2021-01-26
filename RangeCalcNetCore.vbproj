@@ -3,7 +3,17 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <RootNamespace>RangeCalcNetCore</RootNamespace>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
+    <StartupObject>RangeCalcNetCore.Program</StartupObject>
+    <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Version>1.0.5</Version>
+    <Authors>John Dovey</Authors>
+    <Company>El Gato de Fuego</Company>
+    <Product>Range Calculator</Product>
+    <Description>Calculate range by giving compass bearings from two points and the distance between the points</Description>
+    <Copyright>John Dovey &lt;dovey.john@gmail.com&gt;</Copyright>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
 
 </Project>
