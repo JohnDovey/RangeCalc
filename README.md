@@ -35,3 +35,12 @@ If someone wanted to tackle it, then some features I'd like to see would be
 
 ## Comments/forks/commits
 All are welcome. 
+
+## Notes
+.Net core/.Net 5.0 are odd. It tells you it's building a DLL. I was frustrated at first until I discovered
+- It's not. It's creating both a dll and an exe
+- You can run the dll using `dotnet RangeCalcNetCore.dll` from the command line in the windows shell, just the same as you would use `RangeCalcNetCore.exe`
+- You can run `Program.exe` (The Mono version) from the command line in the windows shell, which makes it a lot more platform neutral than I thought
+- It's not as friendly the other way around. Running the windows exe under linux doesn't seem to work. Your Mileage May Vary.
+
+
