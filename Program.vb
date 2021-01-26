@@ -13,35 +13,35 @@ Module Program
 		' Bearing One
 		Console.Write("Bearing from Ref One to Target: ")
 		bearing1 = Console.ReadLine
-		Console.Write(vbTab & "(%u degrees bearing Ref 1 to target) " & vbCrLf, bearing1)
+		Console.WriteLine(vbTab & "({0} degrees bearing Ref 1 to target) ", bearing1)
 
 		If bearing1 > 360 Then
-			Console.Write("Error! No more than 360 Degrees allowed" & vbCrLf)
+			Console.WriteLine("Error! No more than 360 Degrees allowed")
 			Exit Sub
 		End If
 
 		If bearing1 < 1 Then
-			Console.Write("Error! Bearing must be greater than zero" & vbCrLf)
+			Console.WriteLine("Error! Bearing must be greater than zero")
 			Exit Sub
 		End If
 		' Bearing Two
 		Console.Write("Bearing from Ref Two to Target: ")
 		bearing2 = Console.ReadLine
-		Console.Write(vbTab & "(%u degrees bearing Ref 2 to target) " & vbCrLf, bearing2)
+		Console.WriteLine(vbTab & "({0} degrees bearing Ref 2 to target) ", bearing2)
 
 		If bearing2 > 360 Then
-			Console.Write("Error! No more than 360 Degrees allowed" & vbCrLf)
+			Console.WriteLine("Error! No more than 360 Degrees allowed")
 			Exit Sub
 		End If
 		If bearing2 < 1 Then
-			Console.Write("Error! Bearing must be greater than zero" & vbCrLf)
+			Console.WriteLine("Error! Bearing must be greater than zero")
 			Exit Sub
 		End If
 
 		' Seperation Distance
 		Console.Write("Distance between Ref One and Ref Two: ")
 		refdistance = Console.ReadLine
-		Console.Write(vbTab & "(%u meters between reference points) " & vbCrLf, refdistance)
+		Console.WriteLine(vbTab & "({0} meters between reference points) ", refdistance)
 
 		' d = (Tan (90 - (A -B))) x Ref
 		tmpAngle = bearing1 - bearing2
