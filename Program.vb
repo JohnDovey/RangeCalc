@@ -4,7 +4,7 @@ Module Program
     Sub Main()
 		Dim Bearing1 As Integer ' bearing from left ref point to target
 		Dim Bearing2 As Integer ' bearing from right ref point to target
-		Dim RefDistance As Integer ' distance between two ref points _ use %u for unsigned number
+		Dim RefDistance As Integer ' distance between two ref points 
 		Dim RangeToTarget As Double ' Calculated range
 		Dim tmpAngle As Integer
 		Dim OutTxt(2) As String
