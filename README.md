@@ -3,8 +3,10 @@ An attempt to recreate my Range Calculator as a .Net Core app
 
 ## Origin
 Imagine, for no particular reason, that you are standing guard in tower 52 on the perimeter of Balad Joint Base in Iraq. Looking out over the wire, you see a **technical** (Toyota Pickup with a heavy weapon mounted on the back). There are some guys fiddling with the weapon and you want to report it to the BDOC on the Base Defence net.
+
 You *know* that the first question they are going to ask you is how far outside the wire it is, so you want to estimate the distance (range) to the vehicle.
 Instead of guessing, you take a compass bearing from your position to the vehicle. Then you climb on the radio and call your buddy at Tower 53. You ask him if he's seen the vehicle. He has. Now you ask him for a compass bearing from his position to the vehicle.
+
 You know (because you have paced it out numerous times to go an borrow some coffee or just have a chat) that the distance between your two towers (52 and 53) is as close as dammit to 250 meters.
 
 Now you have three pieces of data.
