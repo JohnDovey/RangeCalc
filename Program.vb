@@ -7,8 +7,16 @@ Module Program
 		Dim refdistance As Integer ' distance between two ref points _ use %u for unsigned number
 		Dim rangetotarget As Double ' Calculated range
 		Dim tmpAngle As Integer
- Console.writeline("Range Calculator - by John Dovey <dovey.john@gmail.com>")
- console.writeline("View the code on GitHub [https://github.com/JohnDovey/RangeCalc]")
+		Dim OutTxt(2) As String
+		OutTxt(0) = "+------------------------------------------------------------------+"
+		OutTxt(1) = "| Range Calculator - by John Dovey <dovey.john@gmail.com>          |"
+		OutTxt(2) = "| View the code on GitHub [https://github.com/JohnDovey/RangeCalc] |"
+		Console.WriteLine(OutTxt(0))
+		Console.WriteLine(OutTxt(1))
+		Console.WriteLine(OutTxt(2))
+		Console.WriteLine(OutTxt(0))
+
+
 		Console.Write(vbLf & vbLf & " Enter the values as prompted" & vbCrLf)
 
 		' Bearing One
@@ -51,7 +59,7 @@ Module Program
 		End If
 		rangetotarget = (Math.Tan(90 - tmpAngle)) * refdistance
 		Console.WriteLine("Range to Target: {0}", rangetotarget)
-		Console.Write("Hit a key to continue")
+		Console.Write("Hit a key (softly) to continue")
 		Console.ReadKey()
 
 	End Sub
