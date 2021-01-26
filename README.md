@@ -1,4 +1,4 @@
-# RangeCalcNetCore
+# RangeCalc
 An attempt to recreate my Range Calculator as a .Net Core app
 
 ## Origin
@@ -42,5 +42,8 @@ All are welcome.
 - You can run the dll using `dotnet RangeCalcNetCore.dll` from the command line in the windows shell, just the same as you would use `RangeCalcNetCore.exe`
 - You can run `Program.exe` (The Mono version) from the command line in the windows shell, which makes it a lot more platform neutral than I thought
 - It's not as friendly the other way around. Running the windows exe under linux doesn't seem to work. Your Mileage May Vary.
+
+### Name Change
+- Changed the name from ***RangeCalcNetCore*** to ***RangeCalc***
 
 
