@@ -27,6 +27,8 @@ The first version of this I wrote in C++ because that's what I had, a little cpp
 I converted it to VB.Net as a Net Core console app, hoping it would be platform neutral, but ran into way too many complications. Once I'd gone down the whole rabbit-hole and created the app in windows, I discovered I could simply compile the .vb file on Ubuntu with Mono (Running Ubuntu 20.04 on WSL under windows).
 That compiled exe is also included here. 
 
+![Screen Capture](RangeCalcScreenCapture.png)
+
 ## Quo Vadis
 It would be nice to create a native app with some more features. I've written this same functionality in Xcode on the Mac as an app, and it works, but it's also way too much trouble. 
 If someone wanted to tackle it, then some features I'd like to see would be
