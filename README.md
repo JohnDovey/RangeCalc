@@ -7,7 +7,7 @@ Imagine, for no particular reason, that you are standing guard in tower 52 on th
 You *know* that the first question they are going to ask you is how far outside the wire it is, so you want to estimate the distance (range) to the vehicle.
 Instead of guessing, you take a compass bearing from your position to the vehicle. Then you climb on the radio and call your buddy at Tower 53. You ask him if he's seen the vehicle. He has. Now you ask him for a compass bearing from his position to the vehicle.
 
-You know (because you have paced it out numerous times to go an borrow some coffee or just have a chat) that the distance between your two towers (52 and 53) is as close as dammit to 250 meters.
+You know (because you have paced it out numerous times to go and borrow some coffee or just have a chat) that the distance between your two towers (52 and 53) is as close as dammit to 250 meters.
 
 Now you have three pieces of data.
   1. Bearing from Tower 52 to target (say **25** degrees)
@@ -19,7 +19,7 @@ Now you run this little app, and plug those three pieces of data in. Out pops th
 You can now call up BDOC and with absolute assurance tell them that there is a Technical **178 meters** from the wire. 
 
 ## How does it work?
-It's the simplest trigonomotry which you probably learnt (and promptly forgot) as a kid. You have the length of one side of a triangle and the angles for the other two sides. The simple formula in this program simply calculates the apex of the triangle's distance from the middle of the base of the triangle. 
+It's the simplest [Trigonometry](https://en.wikipedia.org/wiki/Trigonometry) which you probably learnt (and promptly forgot) as a kid. You have the length of one side of a triangle and the angles for the other two sides. The simple formula in this program simply calculates the apex of the triangle's distance from the middle of the base of the triangle. 
 You don't have to worry about that. It just works.
 
 ## The program
