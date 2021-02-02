@@ -50,4 +50,17 @@ All are welcome.
 ### Name Change
 - Changed the name from ***RangeCalcNetCore*** to ***RangeCalc***
 
+## Versions
+- VB.Net
+  - This is the main project
+- C++
+  - This is in the `cpp` folder
+ - VB Mono
+   - In the main directory, compiled version of Program.vb as Program.exe
+ - HTML 
+   - `HTMLVersion` folder
+ - O Version
+   - TODO
+ 
+
 
