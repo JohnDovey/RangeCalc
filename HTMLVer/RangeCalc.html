@@ -1,89 +1,113 @@
-<html><head><META http-equiv="Content-Type" content="text/html; charset=utf-8"></head><body>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <title>Range Calculator</title>
+
+  
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+      <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+      <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+      <!--[if lt IE 9]>
+       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+       <![endif]-->
+      
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+          <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+          <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+          <!-- Latest compiled and minified JavaScript -->
+          <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+          
+          <script>
+              $(function() {
+                                $("#btncalc").click(function() {
+                                                 event.preventDefault();
+                                                 var b1 = parseInt($("#BearingOne").val());
+                                                 var b2 = parseInt($("#BearingTwo").val());
+                                                 var dist = parseInt($("#SepDistance").val());
+                                                 var tmpAngle = b1 - b2;
+                                                 if (tmpAngle < 0) {
+                                                 tmpAngle = tmpAngle * (0-1);
+                                                 }
+                                                 var CalcRangeTmp = (Math.tan(90 - tmpAngle)) * dist;
+                                                 $('div.result').html(CalcRangeTmp);
+                                                 
+                                                 });
+                });
+                                </script>
+</head>
+<body>
+    
+    <h1>Range Calculator</h1>
+    
+    
+<div class="container-fluid">
+<div class="row-fluid">
+<div class="span12">
+
+<form>
+<fieldset>
+<legend>Calculate the Range</legend>
+<div class="form-group">
+    <label for="BearingOne">Bearing One</label>
+    <div class="input-group">
+        <input type="number" class="form-control" id="BearingOne" placeholder="Bearing">
+        <div class="input-group-addon">Degrees</div>
+    </div>
+        <span class="help-block">Bearing one is the bearing from the first static postition to the target.</span>
+</div>
+
+<div class="form-group">
+    <label for="BearingTwo">Bearing Two</label>
+    <div class="input-group">
+        <input type="number" class="form-control" id="BearingTwo" placeholder="Bearing">
+            <div class="input-group-addon">Degrees</div>
+    </div>
+    <span class="help-block">Bearing two is the bearing from the second static postition to the target.</span>
+</div>
+
+<div class="form-group">
+    <label for="SepDistance">Separation Distance</label>
+    <div class="input-group">
+        <input type="number" class="form-control" id="SepDistance" placeholder="Distance">
+            <div class="input-group-addon">Meters</div>
+            </div>
+    <span class="help-block">Separation Distance is the distance between the two static positions.</span>
+</div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Calculated Range</label>
+        <div class="result"></div>
+    </div>
+    
+    <p><button type="submit" id="btncalc" class="btn btn-default">Calculate</button></p>
+</fieldset>
+
+</form>
+</div>
+</div>
+<div class="card" style="width: 40rem;">
+    <img src="" class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">How to use</h5>
+            <p class="card-text">This app is designed to allow you to calculate a range to a target using a compass. All you have to do is select two fixed points. Go to the first fixed point and take a bearing to the target. Then go to the second fixed point and take a second bearing to the target. Then measure the distance between those two fixed points. The calculated range is the distance from between the two fixed points to the target. </p>
+        </div>
+        </div>
+<p>If you found this app to be useful, how about donating a few dollars to say thank you?</p>
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+    <input type="hidden" name="cmd" value="_s-xclick" />
+    <input type="hidden" name="hosted_button_id" value="C9QFERPZUK7D2" />
+    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+    <img alt="" border="0" src="https://www.paypal.com/en_PA/i/scr/pixel.gif" width="1" height="1" />
+</form>
 
 
-		    
-		    
-		    
-		        
-		        
-
-		  
-		  
-		  
-		      
-		      
-		      
-		      
-		      
-		      
-		          
-		          
-		          
-		          
-		          
-		             
-
-		<div>
-			    
-			    <h1>Range Calculator<
-				    <div>
-					    <div>
-						    <div>
-
-							    <form target="_blank" onsubmit="try {return window.confirm(&quot;Thisy not function properly due to certain sconstraints.\nContinue?&quot;);} catch (e) {return false;}">
-								    <fieldset>
-									    <legend>Ce the Range</legend>
-									    <div>
-										    bel>Bearing One</label>
-									        <div>
-											        type="number">
-												        <div>Degrees</div>
-													    </div>
-													            <span>Bearing one is the bearion to the target.</span>
-									    </div>
-
-									    <div>
-										        <label>Bearing Two</label>
-											    <div>
-												     ype="number">
-												                 <div>Degrees</div>
-														     </div>e bearing from the second static postitie target.</span>
-									    </div>
-
-									    <d>Seperation Distance</label>
-								        <div>
-										        <input type="number">
-											rs</div>
-									            </div>
-										        <span>Seperation Distance is the distanco static positions.</span>
-					    </div>
-
-					        <div>
-							        <label>Calculated Range</label>
-								        <div></div>
-									    </div>
-									        
-									        <p><button type="submn></p>
-								    </fieldset>
-
-							    </form>
-				    </div>
-		</div>
-		<div style="width:40rem">
-			        <img alt="...">
-					              <h5>How to use</h5>
-						                  <p>This app is designed  you to calculate a range to a target usmpass. All you  fixed points. Go to the first fixed point and take a bearing to the target. Then go t and take a second bearing to the target. Then measure the distance between those two fixed poie calculated range is the distance from between the two fixed points to    </div>
-								          </div>
-									  <p>If you found this app to be useful, how aboutdollars to say thank you?</p>
-									  <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" onsubmit="try {return window.confirm(&quot;This form may not function properly due to certain security constraints.\nContinue?&quot;);} catch (e) {return false;}">
-											    <input type="hidden" name="cmd" value="_s-xclick">
-													     <input type="hidden" name="hosted_button_id" value="C9QFERPZUK7D2">
-															      <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button">
-																	       <img alt="" border="0" src="https://www.paypal.com/en_PA/i/scr/pixel.gif" width="1" height="1">
-									  </form>
-
-
-									  </div>
-									  </div>
-
-	</body></html>
+</div>
+</body>
+</html>
