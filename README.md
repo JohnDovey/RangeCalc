@@ -59,8 +59,8 @@ All are welcome.
    - In the main directory, compiled version of Program.vb as Program.exe
  - HTML 
    - `HTMLVersion` folder
- - O Version
-   - TODO
+ - GO Version
+   - Added Go version in `./RangeCalc.go/`
  
 
 
