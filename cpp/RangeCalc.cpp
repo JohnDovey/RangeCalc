@@ -14,7 +14,7 @@ int main()
 
 	// Bearing One
 	printf("Bearing from Ref One to Target: ");
-	scanf_s("%i", &bearing1);
+	scanf("%i", &bearing1);
 	printf("\t(%u degrees bearing Ref 1 to target) \r\n", bearing1);
 
 	if (bearing1 > 360)
@@ -30,7 +30,7 @@ int main()
 	}
 	// Bearing Two
 	printf("Bearing from Ref Two to Target: ");
-	scanf_s("%i", &bearing2);
+	scanf("%i", &bearing2);
 	printf("\t(%u degrees bearing Ref 2 to target) \r\n", bearing2);
 
 	if (bearing2 > 360)
@@ -46,7 +46,7 @@ int main()
 
 	// Seperation Distance
 	printf("Distance between Ref One and Ref Two: ");
-	scanf_s("%i", &refdistance);
+	scanf("%i", &refdistance);
 	printf("\t(%u meters between reference points) \r\n", refdistance);
 
 	// d = (Tan (90 - (A -B))) x Ref
