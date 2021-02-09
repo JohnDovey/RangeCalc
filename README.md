@@ -54,13 +54,25 @@ All are welcome.
 - VB.Net
   - This is the main project
 - C++
-  - This is in the `cpp` folder
+  - This is in the `cpp` [folder](cpp/)
  - VB Mono
-   - In the main directory, compiled version of Program.vb as Program.exe
+   - In the main directory, compiled version of Program.vb as [Program.exe](Program.exe)
  - HTML 
-   - `HTMLVersion` folder
+   - `HTMLVersion` [folder](HTMLVer/)
  - GO Version
-   - Added Go version in `./RangeCalc.go/`
+   - Added [Go version](RangeCalc.go) in `./RangeCalc.go/`
  
+
+# Releases
+Added a bunch of releases with the various binaries after GitHub kept whining about it.
+
+- [HTML5](https://github.com/JohnDovey/RangeCalc/releases/tag/html-v0.2)
+- [GO](https://github.com/JohnDovey/RangeCalc/releases/tag/Go-v0.2)
+- [Mono](https://github.com/JohnDovey/RangeCalc/releases/tag/Mono-v02)
+- [.Net 5.0](https://github.com/JohnDovey/RangeCalc/releases/tag/Net5.0-v0.2)
+
+Hope that covers it :-)
+
+If you have any more you'd like to see, add an Issue ...
 
 
