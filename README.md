@@ -62,7 +62,7 @@ All are welcome.
  - GO Version
    - Added [Go version](RangeCalc.go) in `./RangeCalc.go/`
  - MAC Version
-   - Added .NET 5.0 VS Studio Solution/Project
+   - Added .NET 5.0 [VS Studio Solution/Project](https://github.com/JohnDovey/RangeCalc/tree/master/RangeCalcMac)
    - C# verion as a Console App
  
 
