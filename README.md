@@ -56,13 +56,13 @@ All are welcome.
 - C++
   - This is in the `cpp` [folder](cpp/)
  - VB Mono
-   - In the main directory, compiled version of Program.vb as [Program.exe](Program.exe)
+   - In the main directory, compiled version of Program.vb as Program.exe (see [Mono](https://github.com/JohnDovey/RangeCalc/releases/tag/Mono-v02))
  - HTML 
    - `HTMLVersion` [folder](HTMLVer/)
  - GO Version
    - Added [Go version](RangeCalc.go) in `./RangeCalc.go/`
  - MAC Version
-   - Added .NET 5.0 [VS Studio Solution/Project](https://github.com/JohnDovey/RangeCalc/tree/master/RangeCalcMac)
+   - Added .NET 5.0 [VS Studio Solution/Project](https://github.com/JohnDovey/RangeCalc/tree/master/RangeCalcMac) / [RangeCalcMac](RangeCalcMac)
    - C# verion as a Console App
  
 
