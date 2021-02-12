@@ -61,15 +61,19 @@ All are welcome.
    - `HTMLVersion` [folder](HTMLVer/)
  - GO Version
    - Added [Go version](RangeCalc.go) in `./RangeCalc.go/`
+ - MAC Version
+   - Added .NET 5.0 VS Studio Solution/Project
+   - C# verion as a Console App
  
 
 # Releases
 Added a bunch of releases with the various binaries after GitHub kept whining about it.
 
-- [HTML5](https://github.com/JohnDovey/RangeCalc/releases/tag/html-v0.2)
-- [GO](https://github.com/JohnDovey/RangeCalc/releases/tag/Go-v0.2)
-- [Mono](https://github.com/JohnDovey/RangeCalc/releases/tag/Mono-v02)
-- [.Net 5.0](https://github.com/JohnDovey/RangeCalc/releases/tag/Net5.0-v0.2)
+- [HTML5](https://github.com/JohnDovey/RangeCalc/releases/tag/html-v0.2) Anything with a browser
+- [GO](https://github.com/JohnDovey/RangeCalc/releases/tag/Go-v0.2) Windows & Linux
+- [Mono](https://github.com/JohnDovey/RangeCalc/releases/tag/Mono-v02) Linux
+- [.Net 5.0 Win](https://github.com/JohnDovey/RangeCalc/releases/tag/Net5.0-v0.2) Windows
+- [.Net 5.0 MAC](https://github.com/JohnDovey/RangeCalc/releases/tag/MAC-Net5.0-v0.2) Mac
 
 Hope that covers it :-)
 
