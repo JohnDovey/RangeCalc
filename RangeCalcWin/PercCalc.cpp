@@ -1,27 +1,84 @@
 #include <iostream>
-
-using namespace std;
+#include <string>
+#include <iomanip>
+#include <limits>
 
 int main()
 {
+    const std::string ProgVer = "1.0.2";
 
-	char FirstNum[20]; //First Number
-	char SecondNum[20]; //Second Number
-	int MyAns = 0;//My Answer
-	int iFirstNum = 0;
-	int iSecondNum = 0;
+    // Header
+    std::cout << "+------------------------------[" << std::setw(6) << ProgVer << "]----------------------------+\n";
+    std::cout << "|          Percentage Calculator - by John Dovey                     |\n";
+    std::cout << "+--------------------------------------------------------------------+\n\n";
 
+    std::cout << "Enter values as prompted (type 0 to exit)\n\n";
 
-	cout << "Enter First Number and hit ENTER " <<endl;
-	cin >> FirstNum;
-	iFirstNum = stoi(FirstNum);
-	cout << "Enter Second Number and hit ENTER "<<endl;
-	cin >> SecondNum;
-	iSecondNum = stoi(SecondNum);
+    try
+    {
+        double firstNum = GetNumber("Enter First Number");
+        double secondNum = GetNumber("Enter Second Number");
 
-	MyAns = (iFirstNum * 100) / iSecondNum;
+        double percentage = CalculatePercentage(firstNum, secondNum);
 
-	cout << "The Percentage is "<< MyAns <<"%" <<endl;
+        std::cout << "\n";
+        std::cout << std::fixed << std::setprecision(2);
+        std::cout << "The Percentage is " << percentage << "%\n";
+    }
+    catch (const std::exception& ex)
+    {
+        std::cout << "\nError: " << ex.what() << std::endl;
+    }
 
+    std::cout << "\nHit any key to exit...";
+    std::cin.get(); // Wait for user input
     return 0;
+}
+
+// Get a valid number from user with validation loop
+double GetNumber(const std::string& prompt)
+{
+    while (true)
+    {
+        std::cout << prompt << ": ";
+        std::string input;
+        std::getline(std::cin, input);
+
+        // Remove whitespace
+        input.erase(0, input.find_first_not_of(" \t"));
+        input.erase(input.find_last_not_of(" \t") + 1);
+
+        if (input.empty())
+            continue;
+
+        try
+        {
+            double value = std::stod(input);
+
+            if (value == 0.0)
+                throw std::runtime_error("Operation cancelled by user.");
+
+            if (value < 0.0)
+            {
+                std::cout << "Please enter a positive number.\n";
+                continue;
+            }
+
+            std::cout << "  (" << value << ")\n";
+            return value;
+        }
+        catch (...)
+        {
+            std::cout << "Invalid input. Please enter a valid number.\n";
+        }
+    }
+}
+
+// Calculate percentage safely
+double CalculatePercentage(double first, double second)
+{
+    if (second == 0.0)
+        throw std::runtime_error("Cannot divide by zero!");
+
+    return (first * 100.0) / second;
 }
