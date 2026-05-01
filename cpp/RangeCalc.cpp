@@ -1,61 +1,119 @@
-#include <stdio.h>
-#include <string.h>
+#include <iostream>
+#include <iomanip>
+#include <string>
 #include <cmath>
+#include <limits>
+
+const std::string ProgVer = "1.0.15";
+
+void PrintHeader()
+{
+    std::cout << "+------------------------------[" << std::setw(6) << ProgVer << "]----------------------------+\n";
+    std::cout << "|        Range Calculator - by John Dovey <dovey.john@gmail.com>     |\n";
+    std::cout << "| View the code on GitHub [https://github.com/JohnDovey/RangeCalc]   |\n";
+    std::cout << "+--------------------------------------------------------------------+\n\n";
+}
+
+int GetBearing(const std::string& prompt)
+{
+    while (true)
+    {
+        std::cout << prompt << ": ";
+        std::string input;
+        std::getline(std::cin, input);
+
+        try
+        {
+            int value = std::stoi(input);
+
+            if (value == 0)
+                throw std::runtime_error("Operation cancelled.");
+
+            if (value < 1 || value > 360)
+            {
+                std::cout << "Error: Bearing must be between 1 and 360 degrees.\n\n";
+                continue;
+            }
+
+            std::cout << "\t(" << value << "°)\n";
+            return value;
+        }
+        catch (...)
+        {
+            std::cout << "Invalid input. Please enter a number.\n\n";
+        }
+    }
+}
+
+int GetPositiveDistance(const std::string& prompt)
+{
+    while (true)
+    {
+        std::cout << prompt << ": ";
+        std::string input;
+        std::getline(std::cin, input);
+
+        try
+        {
+            int value = std::stoi(input);
+
+            if (value == 0)
+                throw std::runtime_error("Operation cancelled.");
+
+            if (value < 1)
+            {
+                std::cout << "Error: Distance must be greater than zero.\n\n";
+                continue;
+            }
+
+            std::cout << "\t(" << value << " meters between reference points)\n";
+            return value;
+        }
+        catch (...)
+        {
+            std::cout << "Invalid input. Please enter a positive number.\n\n";
+        }
+    }
+}
+
+double CalculateRange(int b1, int b2, int distance)
+{
+    int diff = std::abs(b1 - b2);
+
+    if (diff == 0)
+        throw std::runtime_error("Bearings are identical - cannot calculate range.");
+
+    if (diff >= 90)
+        throw std::runtime_error("Angle difference too large (target likely behind baseline).");
+
+    // Corrected: tan(90° - θ) = cot(θ)
+    double radians = (90.0 - diff) * M_PI / 180.0;
+    return distance * std::tan(radians);
+}
 
 int main()
 {
-	int bearing1;		  // bearing from left ref point to target
-	int bearing2;		  // bearing from right ref point to target
-	int refdistance;	  // distance between two ref points _ use %u for unsigned number
-	double rangetotarget; // Calculated range
-	int tmpAngle;
+    PrintHeader();
+    std::cout << "Enter the values as prompted (0 to exit)\n\n";
 
-	printf("\n\n Enter the values as prompted\r\n");
+    try
+    {
+        int bearing1 = GetBearing("Bearing from Ref One to Target");
+        int bearing2 = GetBearing("Bearing from Ref Two to Target");
+        int refDistance = GetPositiveDistance("Distance between Ref One and Ref Two");
 
-	// Bearing One
-	printf("Bearing from Ref One to Target: ");
-	scanf("%i", &bearing1);
-	printf("\t(%u degrees bearing Ref 1 to target) \r\n", bearing1);
+        double range = CalculateRange(bearing1, bearing2, refDistance);
 
-	if (bearing1 > 360)
-	{
-		printf("Error! No more than 360 Degrees allowed\r\n");
-		return 1;
-	}
+        std::cout << "\n";
+        std::cout << std::fixed << std::setprecision(2);
+        std::cout << "Range to Target: " << range << " meters\n\n";
+    }
+    catch (const std::exception& e)
+    {
+        std::cout << "\nError: " << e.what() << std::endl;
+    }
 
-	if (bearing1 < 1)
-	{
-		printf("Error! Bearing must be greater than zero\r\n");
-		return 10;
-	}
-	// Bearing Two
-	printf("Bearing from Ref Two to Target: ");
-	scanf("%i", &bearing2);
-	printf("\t(%u degrees bearing Ref 2 to target) \r\n", bearing2);
-
-	if (bearing2 > 360)
-	{
-		printf("Error! No more than 360 Degrees allowed\r\n");
-		return 2;
-	}
-	if (bearing2 < 1)
-	{
-		printf("Error! Bearing must be greater than zero\r\n");
-		return 20;
-	}
-
-	// Seperation Distance
-	printf("Distance between Ref One and Ref Two: ");
-	scanf("%i", &refdistance);
-	printf("\t(%u meters between reference points) \r\n", refdistance);
-
-	// d = (Tan (90 - (A -B))) x Ref
-	tmpAngle = bearing1 - bearing2;
-	if (tmpAngle < 0)
-	{
-		tmpAngle = tmpAngle * (0 - 1);
-	}
-	rangetotarget = (tan(90 - tmpAngle)) * refdistance;
-	printf("\r\nRange to Target: %f\r\n\r\n", rangetotarget);
-	return 0;
+    std::cout << "Press any key to exit...";
+    std::cin.get();
+    return 0;
 }
