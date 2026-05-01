@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-const ProgVer = "1.0.3"
+const ProgVer = "1.0.13"
 
 func main() {
 	printHeader()
