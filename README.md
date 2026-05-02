@@ -64,7 +64,15 @@ All are welcome.
  - MAC Version
    - Added .NET 5.0 [VS Studio Solution/Project](https://github.com/JohnDovey/RangeCalc/tree/master/RangeCalcMac) / [RangeCalcMac](RangeCalcMac)
    - C# verion as a Console App
- 
+ ## changes 2026
+ - there was a major flaw in my formula. Fixed for all versions in the source. No executables or releases yet
+ - added some features such as losting previous calculations.
+ - in the HTML version, added a simple and accirate version choice. this updates the calculation to use the law of sines. It also allows a bearing between reference points as the base of the trinagle which improves the accuracy a lot.
+
+## GPS version
+In the HTML version folder, ive added a new version which uses the GPS function. You can choose to use GPS for all three points, either from your device or entered manuall.
+You can also view the result plotted on a map.
+This is experimental.
 
 # Releases
 Added a bunch of releases with the various binaries after GitHub kept whining about it.
