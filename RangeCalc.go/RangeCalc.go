@@ -9,28 +9,53 @@ import (
 	"strings"
 )
 
-const ProgVer = "1.0.13"
+const ProgVer = "2.0.1 - Full Triangulation"
+
+type TriangulationResult struct {
+	RangeFromRef1 float64
+	RangeFromRef2 float64
+	AngleAtTarget float64
+}
 
 func main() {
 	printHeader()
 
-	fmt.Println("Enter the values as prompted (0 to exit)\n")
-
 	bearing1 := getBearing("Bearing from Ref One to Target")
 	bearing2 := getBearing("Bearing from Ref Two to Target")
-	refDistance := getPositiveDistance("Distance between Ref One and Ref Two (meters)")
+	baseline := getPositiveDistance("Baseline Distance (Ref1 to Ref2 in meters)")
 
-	rangeToTarget := calculateRange(bearing1, bearing2, refDistance)
+	fmt.Println("\nChoose calculation method:")
+	fmt.Println("1. Simple (fast, assumes perpendicular baseline)")
+	fmt.Println("2. Full Triangulation (more accurate with Baseline Bearing)")
+	fmt.Print("Enter choice (1 or 2): ")
+	choice := readInput()
 
-	fmt.Println()
-	fmt.Printf("Range to Target: %.2f meters\n\n", rangeToTarget)
+	var result TriangulationResult
+	if choice == "2" {
+		baselineBearing := getBearing("Baseline Bearing (direction from Ref1 to Ref2)")
+		result = calculateFullTriangulation(bearing1, bearing2, baseline, baselineBearing)
+	} else {
+		result = calculateSimple(bearing1, bearing2, baseline)
+	}
+
+	fmt.Println("\n=== RESULTS ===")
+	fmt.Printf("Range from Ref One : %.2f meters\n", result.RangeFromRef1)
+	fmt.Printf("Range from Ref Two : %.2f meters\n", result.RangeFromRef2)
+	fmt.Printf("Angle at Target    : %.1f°\n", result.AngleAtTarget)
 }
 
 func printHeader() {
 	fmt.Printf("+------------------------------[%s]----------------------------+\n", ProgVer)
-	fmt.Println("|        Range Calculator - by John Dovey <dovey.john@gmail.com>     |")
-	fmt.Println("| View the code on GitHub [https://github.com/JohnDovey/RangeCalc]   |")
-	fmt.Printf("+--------------------------------------------------------------------+\n\n")
+	fmt.Println("|        Range Calculator - Full Triangulation Edition           |")
+	fmt.Println("| View the code on GitHub [https://github.com/JohnDovey/RangeCalc] |")
+	fmt.Println("+--------------------------------------------------------------------+\n")
+	fmt.Println("Enter the values as prompted (0 to exit)\n")
+}
+
+func readInput() string {
+	reader := bufio.NewReader(os.Stdin)
+	input, _ := reader.ReadString('\n')
+	return strings.TrimSpace(input)
 }
 
 func getBearing(prompt string) float64 {
@@ -75,30 +100,59 @@ func getPositiveDistance(prompt string) float64 {
 			continue
 		}
 
-		fmt.Printf("\t(%.0f meters between reference points)\n", value)
+		fmt.Printf("\t(%.0f meters)\n", value)
 		return value
 	}
 }
 
-func calculateRange(b1, b2, distance float64) float64 {
+func calculateSimple(b1, b2, baseline float64) TriangulationResult {
 	diff := math.Abs(b1 - b2)
-
 	if diff == 0 {
-		fmt.Println("Error: Bearings are identical - cannot calculate range.")
-		os.Exit(1)
-	}
-	if diff >= 90 {
-		fmt.Println("Error: Angle difference too large (target likely behind baseline).")
+		fmt.Println("Error: Bearings are identical.")
 		os.Exit(1)
 	}
 
-	// FIXED: Convert degrees to radians
-	radians := (90.0 - diff) * math.Pi / 180.0
-	return distance * math.Tan(radians)
+	rad := (90.0 - diff) * math.Pi / 180.0
+	rangeVal := baseline * math.Tan(rad)
+
+	return TriangulationResult{
+		RangeFromRef1: rangeVal,
+		RangeFromRef2: rangeVal,
+		AngleAtTarget: diff,
+	}
 }
 
-func readInput() string {
-	reader := bufio.NewReader(os.Stdin)
-	input, _ := reader.ReadString('\n')
-	return strings.TrimSpace(input)
+func calculateFullTriangulation(b1, b2, baseline, baselineBearing float64) TriangulationResult {
+	angleAtTarget := math.Abs(b1 - b2)
+	if angleAtTarget > 180 {
+		angleAtTarget = 360 - angleAtTarget
+	}
+
+	if angleAtTarget == 0 {
+		fmt.Println("Error: Bearings are identical.")
+		os.Exit(1)
+	}
+
+	angleAtRef1 := math.Abs(baselineBearing - b1)
+	if angleAtRef1 > 180 {
+		angleAtRef1 = 360 - angleAtRef1
+	}
+
+	angleAtRef2 := 180.0 - angleAtTarget - angleAtRef1
+
+	if angleAtRef2 <= 0 {
+		fmt.Println("Error: Invalid geometry (target position not possible with these bearings).")
+		os.Exit(1)
+	}
+
+	// Law of Sines
+	sinTarget := math.Sin(angleAtTarget * math.Pi / 180)
+	rangeFromRef1 := baseline * math.Sin(angleAtRef2*math.Pi/180) / sinTarget
+	rangeFromRef2 := baseline * math.Sin(angleAtRef1*math.Pi/180) / sinTarget
+
+	return TriangulationResult{
+		RangeFromRef1: rangeFromRef1,
+		RangeFromRef2: rangeFromRef2,
+		AngleAtTarget: angleAtTarget,
+	}
 }
