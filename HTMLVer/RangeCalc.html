@@ -3,174 +3,168 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>John Dovey's Range Calculator</title>
+    <meta name="theme-color" content="#0d6efd" />
+    <title>Range Calculator - Full Triangulation</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.min.css" />
 
     <style>
         body { transition: background-color 0.3s; }
-        .result { font-size: 2.4rem; font-weight: bold; }
-        .history-item { font-size: 1.1rem; }
+        .result { font-size: 2.4rem; font-weight: 700; }
+        .card { background-color: #2c2c2c; }
     </style>
 </head>
 <body data-bs-theme="dark">
-    <div class="container py-5">
+    <div class="container py-4">
         <div class="row justify-content-center">
             <div class="col-lg-8">
+
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <div>
                         <h1 class="display-5 fw-bold">Range Calculator</h1>
-                        <p class="lead mb-0">by John Dovey</p>
+                        <p class="lead text-muted">Full Triangulation Edition</p>
                     </div>
-                    <button id="themeToggle" class="btn btn-outline-secondary">
-                        <i class="bi bi-sun-fill"></i>
-                    </button>
+                    <button id="themeToggle" class="btn btn-outline-light">🌙</button>
                 </div>
 
                 <div class="card shadow">
-                    <div class="card-header text-center bg-primary">
+                    <div class="card-header bg-primary text-center py-3">
                         <h3>Calculate Range to Target</h3>
                     </div>
                     <div class="card-body">
                         <form id="rangeForm">
                             <div class="mb-3">
-                                <label for="BearingOne" class="form-label">Bearing One</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control" id="BearingOne" min="1" max="360" placeholder="e.g. 45" required />
-                                    <span class="input-group-text">°</span>
-                                </div>
+                                <label class="form-label">Bearing One (Ref 1)</label>
+                                <input type="number" class="form-control form-control-lg" id="b1" min="1" max="360" placeholder="45" required>
                             </div>
-
                             <div class="mb-3">
-                                <label for="BearingTwo" class="form-label">Bearing Two</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control" id="BearingTwo" min="1" max="360" placeholder="e.g. 90" required />
-                                    <span class="input-group-text">°</span>
-                                </div>
+                                <label class="form-label">Bearing Two (Ref 2)</label>
+                                <input type="number" class="form-control form-control-lg" id="b2" min="1" max="360" placeholder="90" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Baseline Distance</label>
+                                <input type="number" class="form-control form-control-lg" id="dist" min="1" placeholder="100" required>
+                                <small class="text-muted">meters between Ref1 and Ref2</small>
                             </div>
 
                             <div class="mb-4">
-                                <label for="SepDistance" class="form-label">Separation Distance</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control" id="SepDistance" min="1" placeholder="e.g. 100" required />
-                                    <span class="input-group-text">Meters</span>
-                                </div>
+                                <label class="form-label">Calculation Method</label>
+                                <select class="form-select form-select-lg" id="method">
+                                    <option value="1">Simple (Fast)</option>
+                                    <option value="2">Full Triangulation (Accurate)</option>
+                                </select>
                             </div>
 
-                            <button type="submit" class="btn btn-primary btn-lg w-100 mb-3" id="btncalc">
-                                Calculate Range
-                            </button>
-                            <button type="button" class="btn btn-outline-secondary w-100" id="btnReset">Calculate Again</button>
+                            <div id="baselineGroup" class="mb-4 d-none">
+                                <label class="form-label">Baseline Bearing (Ref1 → Ref2)</label>
+                                <input type="number" class="form-control form-control-lg" id="baselineBearing" min="1" max="360" placeholder="0" required>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-lg w-100">Calculate</button>
                         </form>
 
-                        <div id="resultContainer" class="mt-4 text-center d-none">
-                            <label class="form-label fs-5">Calculated Range</label>
-                            <div id="result" class="result text-success"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- History -->
-                <div class="card mt-4 shadow">
-                    <div class="card-header">
-                        <h5>Calculation History</h5>
-                    </div>
-                    <div class="card-body" id="history" style="max-height: 300px; overflow-y: auto;">
-                        <!-- History items added by JS -->
-                    </div>
-                </div>
-
-                <!-- How to Use + Donation -->
-                <div class="row mt-4">
-                    <div class="col-md-7">
-                        <div class="card shadow h-100">
-                            <div class="card-body">
-                                <h5>How to Use</h5>
-                                <p class="card-text">Take two compass bearings to the target from two fixed points, then measure the distance between those points.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-5">
-                        <div class="card shadow h-100">
-                            <div class="card-body text-center">
-                                <h5>Support This Project</h5>
-                                <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-                                    <input type="hidden" name="cmd" value="_s-xclick" />
-                                    <input type="hidden" name="hosted_button_id" value="C9QFERPZUK7D2" />
-                                    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif"
-                                           border="0" name="submit" alt="Donate with PayPal" />
-                                </form>
+                        <div id="resultContainer" class="mt-4 d-none">
+                            <div class="card border-success">
+                                <div class="card-body text-center">
+                                    <h5>Results</h5>
+                                    <div id="result1" class="result text-success"></div>
+                                    <div id="result2" class="result text-info mt-2"></div>
+                                    <small id="angle" class="text-muted"></small>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <button id="resetBtn" class="btn btn-outline-secondary w-100 mt-3">New Calculation</button>
             </div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
     <script>
-        // Theme Toggle
-        const themeToggle = document.getElementById('themeToggle');
-        const html = document.documentElement;
+        const form = document.getElementById('rangeForm');
+        const baselineGroup = document.getElementById('baselineGroup');
+        const resultContainer = document.getElementById('resultContainer');
 
-        themeToggle.addEventListener('click', () => {
-            if (html.getAttribute('data-bs-theme') === 'dark') {
-                html.setAttribute('data-bs-theme', 'light');
-                themeToggle.innerHTML = '<i class="bi bi-moon-fill"></i>';
-            } else {
-                html.setAttribute('data-bs-theme', 'dark');
-                themeToggle.innerHTML = '<i class="bi bi-sun-fill"></i>';
-            }
+        // Show/hide baseline bearing field
+        document.getElementById('method').addEventListener('change', function() {
+            baselineGroup.classList.toggle('d-none', this.value === '1');
         });
 
-        // Form Handling
-        const form = document.getElementById('rangeForm');
-        const resultContainer = document.getElementById('resultContainer');
-        const resultDiv = document.getElementById('result');
-        const historyDiv = document.getElementById('history');
-
-        function addToHistory(b1, b2, dist, range) {
-            const entry = document.createElement('div');
-            entry.className = "history-item border-bottom py-2";
-            entry.innerHTML = `
-                <strong>${range.toFixed(2)} m</strong><br>
-                <small>B1: ${b1}° | B2: ${b2}° | Dist: ${dist} m</small>
-            `;
-            historyDiv.prepend(entry);
-        }
-
-        form.addEventListener('submit', function (e) {
+        form.addEventListener('submit', function(e) {
             e.preventDefault();
 
-            const b1 = parseFloat(document.getElementById('BearingOne').value);
-            const b2 = parseFloat(document.getElementById('BearingTwo').value);
-            const dist = parseFloat(document.getElementById('SepDistance').value);
+            const b1 = parseFloat(document.getElementById('b1').value);
+            const b2 = parseFloat(document.getElementById('b2').value);
+            const dist = parseFloat(document.getElementById('dist').value);
+            const method = document.getElementById('method').value;
 
-            if (!b1 || !b2 || !dist || b1 < 1 || b1 > 360 || b2 < 1 || b2 > 360 || dist < 1) {
-                alert("Please enter valid values.\nBearings: 1–360\nDistance: > 0");
+            if (!b1 || !b2 || !dist) {
+                alert("Please fill all required fields.");
                 return;
             }
 
-            const diff = Math.abs(b1 - b2);
-            if (diff === 0) return alert("Bearings are identical.");
-            if (diff >= 90) return alert("Angle difference too large.");
+            let result;
+            if (method === "2") {
+                const baselineBearing = parseFloat(document.getElementById('baselineBearing').value);
+                if (!baselineBearing) {
+                    alert("Please enter Baseline Bearing for Full mode.");
+                    return;
+                }
+                result = calculateFull(b1, b2, dist, baselineBearing);
+            } else {
+                result = calculateSimple(b1, b2, dist);
+            }
 
-            const radians = (90 - diff) * Math.PI / 180;
-            const range = dist * Math.tan(radians);
-
-            resultDiv.textContent = range.toFixed(2) + " meters";
+            // Display results
+            document.getElementById('result1').textContent = `From Ref 1: ${result.range1.toFixed(2)} m`;
+            document.getElementById('result2').textContent = `From Ref 2: ${result.range2.toFixed(2)} m`;
+            document.getElementById('angle').textContent = `Angle at Target: ${result.angle.toFixed(1)}°`;
             resultContainer.classList.remove('d-none');
-
-            addToHistory(b1, b2, dist, range);
         });
 
-        // Calculate Again
-        document.getElementById('btnReset').addEventListener('click', () => {
+        function calculateSimple(b1, b2, dist) {
+            let diff = Math.abs(b1 - b2);
+            if (diff > 180) diff = 360 - diff;
+            const rad = (90 - diff) * Math.PI / 180;
+            const range = dist * Math.tan(rad);
+            return { range1: range, range2: range, angle: diff };
+        }
+
+        function calculateFull(b1, b2, dist, baselineBearing) {
+            let angleAtTarget = Math.abs(b1 - b2);
+            if (angleAtTarget > 180) angleAtTarget = 360 - angleAtTarget;
+
+            let angleAtRef1 = Math.abs(baselineBearing - b1);
+            if (angleAtRef1 > 180) angleAtRef1 = 360 - angleAtRef1;
+
+            const angleAtRef2 = 180 - angleAtTarget - angleAtRef1;
+
+            if (angleAtRef2 <= 0) {
+                alert("Invalid geometry. Check your bearings.");
+                return { range1: 0, range2: 0, angle: angleAtTarget };
+            }
+
+            const sinTarget = Math.sin(angleAtTarget * Math.PI / 180);
+            const range1 = dist * Math.sin(angleAtRef2 * Math.PI / 180) / sinTarget;
+            const range2 = dist * Math.sin(angleAtRef1 * Math.PI / 180) / sinTarget;
+
+            return { range1, range2, angle: angleAtTarget };
+        }
+
+        // Reset
+        document.getElementById('resetBtn').addEventListener('click', () => {
             form.reset();
             resultContainer.classList.add('d-none');
+            baselineGroup.classList.add('d-none');
+        });
+
+        // Theme Toggle
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+            document.documentElement.setAttribute('data-bs-theme', isDark ? 'light' : 'dark');
+            document.getElementById('themeToggle').textContent = isDark ? '☀️' : '🌙';
         });
     </script>
 </body>
