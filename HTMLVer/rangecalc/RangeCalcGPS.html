@@ -3,11 +3,19 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#198754" />
+    <meta name="description" content="Range to target with GPS, bearings, and Leaflet map. Works offline after first visit (map tiles need a connection)." />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
     <title>RangeCalc GPS + Map</title>
-    
+
+    <link rel="manifest" href="range-calc-gps.webmanifest" />
+    <link rel="icon" href="icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="icon.svg" />
+
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    
+
     <!-- Leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -16,6 +24,19 @@
         body { transition: background-color 0.3s; }
         #map { height: 400px; border-radius: 8px; }
         .result { font-size: 2.2rem; font-weight: 700; }
+        .leaflet-div-icon.rangecalc-target-icon {
+            background: transparent !important;
+            border: none !important;
+        }
+        .rangecalc-target-icon-inner {
+            display: block;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #198754;
+            border: 3px solid #fff;
+            box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35);
+        }
     </style>
 </head>
 <body data-bs-theme="dark">
@@ -87,17 +108,27 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         let pos1 = null, pos2 = null, posTarget = null;
-        let map = null, markers = [];
+        let map = null;
 
         function getGPS(ref) {
             if (!navigator.geolocation) return alert("GPS not supported on this device");
-            
+
             navigator.geolocation.getCurrentPosition(pos => {
                 const latlng = `${pos.coords.latitude.toFixed(6)}, ${pos.coords.longitude.toFixed(6)}`;
                 if (ref === 1) { document.getElementById('gps1').value = latlng; pos1 = pos.coords; }
                 else if (ref === 2) { document.getElementById('gps2').value = latlng; pos2 = pos.coords; }
                 else if (ref === 3) { document.getElementById('gpsTarget').value = latlng; posTarget = pos.coords; }
             }, () => alert("Failed to get location. Check permissions."));
+        }
+
+        function targetMarkerIcon() {
+            return L.divIcon({
+                className: 'leaflet-div-icon rangecalc-target-icon',
+                html: '<span class="rangecalc-target-icon-inner" aria-hidden="true"></span>',
+                iconSize: [22, 22],
+                iconAnchor: [11, 11],
+                popupAnchor: [0, -10]
+            });
         }
 
         document.getElementById('gpsForm').addEventListener('submit', e => {
@@ -109,18 +140,22 @@
             const b2 = parseFloat(document.getElementById('b2').value);
             if (!b1 || !b2) return alert("Enter both bearings");
 
+            const method = document.getElementById('method').value;
             const baseline = calculateDistance(pos1.latitude, pos1.longitude, pos2.latitude, pos2.longitude);
             const baselineBearing = calculateBearing(pos1.latitude, pos1.longitude, pos2.latitude, pos2.longitude);
 
-            const result = calculateFullTriangulation(b1, b2, baseline, baselineBearing);
+            let result;
+            if (method === '1') {
+                result = calculateSimpleTriangulation(b1, b2, baseline);
+            } else {
+                result = calculateFullTriangulation(b1, b2, baseline, baselineBearing);
+            }
 
-            // Show results
             document.getElementById('range1').textContent = result.range1.toFixed(2) + " m";
             document.getElementById('range2').textContent = result.range2.toFixed(2) + " m";
             document.getElementById('baseline').textContent = baseline.toFixed(1);
             document.getElementById('resultContainer').classList.remove('d-none');
 
-            // Show map
             showMap(pos1, pos2, posTarget, result.range1, result.range2);
         });
 
@@ -139,6 +174,14 @@
                       Math.sin(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.cos(dLon);
             let brng = Math.atan2(y, x) * 180 / Math.PI;
             return (brng + 360) % 360;
+        }
+
+        function calculateSimpleTriangulation(b1, b2, baseline) {
+            let diff = Math.abs(b1 - b2);
+            if (diff > 180) diff = 360 - diff;
+            const rad = (90 - diff) * Math.PI / 180;
+            const range = baseline * Math.tan(rad);
+            return { range1: range, range2: range };
         }
 
         function calculateFullTriangulation(b1, b2, baseline, baselineBearing) {
@@ -169,24 +212,30 @@
                 attribution: '&copy; OpenStreetMap contributors'
             }).addTo(map);
 
-            // Markers
             L.marker([p1.latitude, p1.longitude]).addTo(map).bindPopup("Ref 1").openPopup();
             L.marker([p2.latitude, p2.longitude]).addTo(map).bindPopup("Ref 2");
 
-            // Target GPS (verification)
             if (pTarget) {
-                L.marker([pTarget.latitude, pTarget.longitude], {color: 'green'}).addTo(map)
-                 .bindPopup("Actual Target GPS").openPopup();
+                L.marker([pTarget.latitude, pTarget.longitude], { icon: targetMarkerIcon() })
+                    .addTo(map)
+                    .bindPopup("Actual Target GPS")
+                    .openPopup();
             }
 
-            // Circles showing calculated range
             L.circle([p1.latitude, p1.longitude], {radius: range1, color: '#0d6efd'}).addTo(map)
-             .bindPopup(`Range from Ref 1: ${range1.toFixed(1)} m`);
+                .bindPopup(`Range from Ref 1: ${range1.toFixed(1)} m`);
             L.circle([p2.latitude, p2.longitude], {radius: range2, color: '#198754'}).addTo(map)
-             .bindPopup(`Range from Ref 2: ${range2.toFixed(1)} m`);
+                .bindPopup(`Range from Ref 2: ${range2.toFixed(1)} m`);
 
-            // Baseline line
             L.polyline([[p1.latitude, p1.longitude], [p2.latitude, p2.longitude]], {color: 'orange'}).addTo(map);
+        }
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker
+                    .register('range-calc-gps-sw.js', { scope: './' })
+                    .catch((err) => console.warn('RangeCalc GPS SW register failed:', err));
+            });
         }
     </script>
 </body>
