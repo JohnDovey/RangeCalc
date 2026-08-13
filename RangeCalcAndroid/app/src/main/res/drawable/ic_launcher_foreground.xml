@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Two bearing lines converging on a target, inside the 66dp adaptive-icon safe zone. -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="3"
+        android:strokeLineCap="round"
+        android:pathData="M24,74 L54,40"/>
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="3"
+        android:strokeLineCap="round"
+        android:pathData="M84,74 L54,40"/>
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#2AA876"
+        android:strokeWidth="4"
+        android:pathData="M54,40 m-9,0 a9,9 0,1 1,18 0 a9,9 0,1 1,-18 0"/>
+    <path
+        android:fillColor="#2AA876"
+        android:pathData="M54,40 m-3,0 a3,3 0,1 1,6 0 a3,3 0,1 1,-6 0"/>
+</vector>

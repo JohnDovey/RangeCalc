@@ -120,6 +120,7 @@ namespace RangeCalcMac
         private static TriangulationResult CalculateSimple(int b1, int b2, int baseline)
         {
             int diff = Math.Abs(b1 - b2);
+            if (diff > 180) diff = 360 - diff;
             if (diff == 0) throw new ArithmeticException("Bearings identical.");
             if (diff >= 90) Console.WriteLine("Warning: Large angle - accuracy reduced.");
 

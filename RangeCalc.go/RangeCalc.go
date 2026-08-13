@@ -107,6 +107,9 @@ func getPositiveDistance(prompt string) float64 {
 
 func calculateSimple(b1, b2, baseline float64) TriangulationResult {
 	diff := math.Abs(b1 - b2)
+	if diff > 180 {
+		diff = 360 - diff
+	}
 	if diff == 0 {
 		fmt.Println("Error: Bearings are identical.")
 		os.Exit(1)

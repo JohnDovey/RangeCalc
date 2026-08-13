@@ -64,7 +64,10 @@ Module Program
 		If tmpAngle < 0 Then
 			tmpAngle *= (0 - 1)
 		End If
-		RangeToTarget = (Math.Tan(90 - tmpAngle)) * RefDistance
+		If tmpAngle > 180 Then
+			tmpAngle = 360 - tmpAngle
+		End If
+		RangeToTarget = Math.Tan((90 - tmpAngle) * Math.PI / 180.0) * RefDistance
 		Console.WriteLine("Range to Target: {0}", RangeToTarget)
 		Console.Write("Hit a key (softly) to continue")
 		Console.ReadKey()
