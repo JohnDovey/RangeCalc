@@ -1,5 +1,5 @@
 # RangeCalc
-An attempt to recreate my Range Calculator as a .Net Core app
+A range-to-target calculator from two compass bearings and a baseline distance — what started as an attempt to recreate my Range Calculator as a .Net Core app now has more versions than any one calculator reasonably needs: VB.Net, C++, Go, HTML5, macOS, and Android.
 
 ## Origin
 Imagine, for no particular reason, that you are standing guard in tower 52 on the perimeter of Balad Joint Base in Iraq. Looking out over the wire, you see a **technical** (Toyota Pickup with a heavy weapon mounted on the back). There are some guys fiddling with the weapon and you want to report it to the BDOC on the Base Defence net.
@@ -32,10 +32,10 @@ That compiled exe is also included here.
 ## Quo Vadis
 It would be nice to create a native app with some more features. I've written this same functionality in Xcode on the Mac as an app, and it works, but it's also way too much trouble. 
 If someone wanted to tackle it, then some features I'd like to see would be
-- Buttons and sliders and all those fancy things
-- Log the two positions as GPS coords and calculate the range to a third 
-- select positions from the map instead of having to add them manually.
-- Draw the triangle (on the map) using the coords
+- ~~Buttons and sliders and all those fancy things~~ Done — see the [Android version](RangeCalcAndroid/)
+- Log the two positions as GPS coords and calculate the range to a third
+- select positions from the map instead of having to add them manually. (Partially done — see the GPS version in `HTMLVer/`, which places all three points on a map)
+- Draw the triangle (on the map) using the coords (also partially done in the GPS version)
 
 ## Comments/forks/commits
 All are welcome. 
@@ -55,19 +55,27 @@ All are welcome.
   - This is the main project
 - C++
   - This is in the `cpp` [folder](cpp/)
+  - Also available as a Windows console app + Visual Studio solution in [RangeCalcWin](RangeCalcWin/)
  - VB Mono
    - In the main directory, compiled version of Program.vb as Program.exe (see [Mono](https://github.com/JohnDovey/RangeCalc/releases/tag/Mono-v02))
  - HTML 
    - `HTMLVersion` [folder](HTMLVer/)
  - GO Version
    - Added [Go version](RangeCalc.go) in `./RangeCalc.go/`
+   - Interactive prompts by default; pass `-b1`, `-b2`, `-d` (and optionally `-bp` for full triangulation, `-o <file>` for a formatted report) to run it non-interactively for scripting — see [RangeCalc.go/Readme.md](RangeCalc.go/Readme.md)
+   - Also available as a keyboard-driven terminal UI (bubbletea/lipgloss) in [RangeCalcCon](RangeCalcCon/), with calculation history
  - MAC Version
    - Added .NET 5.0 [VS Studio Solution/Project](https://github.com/JohnDovey/RangeCalc/tree/master/RangeCalcMac) / [RangeCalcMac](RangeCalcMac)
-   - C# verion as a Console App
+   - C# verion as a Console App, supports both Simple and Full Triangulation methods
+ - Android Version
+   - Native Jetpack Compose app in [RangeCalcAndroid](RangeCalcAndroid/), Simple + Full Triangulation methods, calculation history, and an About screen
  ## changes 2026
  - there was a major flaw in my formula. Fixed for all versions in the source. No executables or releases yet
  - added some features such as losting previous calculations.
  - in the HTML version, added a simple and accirate version choice. this updates the calculation to use the law of sines. It also allows a bearing between reference points as the base of the trinagle which improves the accuracy a lot.
+ - audited every version for the degrees-into-trig-functions bug and the circular bearing wraparound (e.g. 350° vs 25° should read as 35°, not 325°) — found and fixed it still lurking in Program.vb's Simple mode (never converted to radians at all) and in the Simple mode of the Go and Mac versions (missing the wraparound). Full Triangulation mode was already correct everywhere.
+ - added a native Android version (Jetpack Compose)
+ - added non-interactive `-b1`/`-b2`/`-d`/`-bp`/`-o` flags to the Go version for scripting/piping
 
 ## GPS version
 In the HTML version folder, ive added a new version which uses the GPS function. You can choose to use GPS for all three points, either from your device or entered manuall.

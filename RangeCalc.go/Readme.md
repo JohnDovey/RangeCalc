@@ -37,3 +37,6 @@ RangeCalc -b1 25 -b2 350 -d 250 -bp 90 -o report.txt
 `-b1`, `-b2`, and `-bp` are compass bearings in degrees (1-360); `-d` is
 the baseline distance in meters. All of `-b1`, `-b2`, and `-d` are
 required together when using flags at all.
+
+[`sample-output.txt`](sample-output.txt) is an example of the `-o` report
+format, generated with `-b1 25 -b2 320 -d 250`.
