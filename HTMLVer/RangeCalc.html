@@ -57,7 +57,7 @@
 
                             <div id="baselineGroup" class="mb-4 d-none">
                                 <label class="form-label">Baseline Bearing (Ref1 → Ref2)</label>
-                                <input type="number" class="form-control form-control-lg" id="baselineBearing" min="1" max="360" placeholder="0" required>
+                                <input type="number" class="form-control form-control-lg" id="baselineBearing" min="1" max="360" placeholder="0">
                             </div>
 
                             <button type="submit" class="btn btn-primary btn-lg w-100">Calculate</button>
@@ -87,9 +87,14 @@
         const baselineGroup = document.getElementById('baselineGroup');
         const resultContainer = document.getElementById('resultContainer');
 
-        // Show/hide baseline bearing field
+        // Show/hide baseline bearing field. It must not be `required` while
+        // hidden — a hidden-but-required field makes the browser's native
+        // validation try (and fail) to focus it, which silently blocks
+        // submission instead of running the submit handler below.
         document.getElementById('method').addEventListener('change', function() {
-            baselineGroup.classList.toggle('d-none', this.value === '1');
+            const isFull = this.value !== '1';
+            baselineGroup.classList.toggle('d-none', !isFull);
+            document.getElementById('baselineBearing').required = isFull;
         });
 
         form.addEventListener('submit', function(e) {

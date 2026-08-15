@@ -1,5 +1,5 @@
 /* RangeCalc Standard — offline shell + CDN asset cache */
-const CACHE = 'range-calc-standard-v1';
+const CACHE = 'range-calc-standard-v2';
 const SHELL = new URL('./RangeCalc.html', self.location).href;
 const ASSETS = [
   './RangeCalc.html',
