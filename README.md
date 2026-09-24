@@ -23,7 +23,7 @@ It's the simplest [Trigonometry](https://en.wikipedia.org/wiki/Trigonometry) whi
 You don't have to worry about that. It just works.
 
 ## The program
-The first version of this I wrote in C++ because that's what I had, a little cpp app on my phone. That original program is included here in the cpp folder.
+The first version of this I wrote in C++ because that's what I had, a little cpp app on my phone. That original program is included here in the [RangeCalcCpp](RangeCalcCpp/) folder.
 I converted it to VB.NET as a .NET Core console app, hoping it would be platform neutral, but ran into way too many complications. Once I'd gone down the whole rabbit-hole and created the app in windows, I discovered I could simply compile the .vb file on Ubuntu with Mono (Running Ubuntu 20.04 on WSL under windows).
 That compiled exe is also included in the [RangeCalcVB](RangeCalcVB/) folder.
 
@@ -55,7 +55,7 @@ All are welcome.
 - VB.NET
   - This is the main project, in the [RangeCalcVB](RangeCalcVB/) folder. Targets .NET 10.
 - C++
-  - This is in the `cpp` [folder](cpp/)
+  - This is in the [RangeCalcCpp](RangeCalcCpp/) folder
   - Also available as a Windows console app + Visual Studio solution in [RangeCalcWin](RangeCalcWin/)
 - VB Mono
   - In the [RangeCalcVB](RangeCalcVB/) folder, compiled version of Program.vb as Program.exe (see [Mono](https://github.com/JohnDovey/RangeCalc/releases/tag/Mono-v02))
