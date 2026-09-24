@@ -44,7 +44,7 @@ jobs:
         with:
           dotnet-version: 10.0.x
       - name: Restore
-        run: dotnet restore "${{ matrix.project }}" -r ${{ matrix.rid }} -p:PublishTrimmed=true
+        run: dotnet restore "${{ matrix.project }}" -r ${{ matrix.rid }} -p:PublishTrimmed=true -v:detailed
       - name: Publish
         run: |
           dotnet publish "${{ matrix.project }}" -c Release -r ${{ matrix.rid }} --no-restore \
