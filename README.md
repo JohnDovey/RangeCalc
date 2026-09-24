@@ -25,7 +25,7 @@ You don't have to worry about that. It just works.
 ## The program
 The first version of this I wrote in C++ because that's what I had, a little cpp app on my phone. That original program is included here in the [RangeCalcCpp](RangeCalcCpp/) folder.
 I converted it to VB.NET as a .NET Core console app, hoping it would be platform neutral, but ran into way too many complications. Once I'd gone down the whole rabbit-hole and created the app in windows, I discovered I could simply compile the .vb file on Ubuntu with Mono (Running Ubuntu 20.04 on WSL under windows).
-That compiled exe is also included in the [RangeCalcVB](RangeCalcVB/) folder.
+That compiled exe is available from the [Mono release](https://github.com/JohnDovey/RangeCalc/releases/tag/Mono-v02).
 
 ![Screen Capture](RangeCalcScreenCapture.png)
 
@@ -58,7 +58,7 @@ All are welcome.
   - This is in the [RangeCalcCpp](RangeCalcCpp/) folder
   - Also available as a Windows console app + Visual Studio solution in [RangeCalcWin](RangeCalcWin/)
 - VB Mono
-  - In the [RangeCalcVB](RangeCalcVB/) folder, compiled version of Program.vb as Program.exe (see [Mono](https://github.com/JohnDovey/RangeCalc/releases/tag/Mono-v02))
+  - Program.vb compiled with Mono as Program.exe — see the [Mono release](https://github.com/JohnDovey/RangeCalc/releases/tag/Mono-v02)
 - HTML
   - `HTMLVersion` [folder](HTMLVer/)
   - Live, installable PWA versions (Standard and GPS+map) at [johndovey.github.io/RangeCalc](https://johndovey.github.io/RangeCalc/)

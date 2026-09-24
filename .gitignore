@@ -338,3 +338,12 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+# Compiled RangeCalc binaries - these ship via GitHub Releases, not the repo
+*.exe
+*.ubuntu
+RangeCalc.go/RangeCalc
+RangeCalcWin/rangecalc
+RangeCalcWin/PercCalc
+
+# macOS Finder metadata
+.DS_Store

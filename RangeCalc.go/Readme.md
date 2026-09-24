@@ -2,9 +2,8 @@
 
 This Directory holds the *Go* language version of the Range Calculator
 
-- The file `RangeCalc.exe` is the Windows compiled version. 
-- `RangeCalc` was compiled on Ubuntu 20.04.
-- Source is, of course, in `RangeCalc.go`.
+- Source is, of course, in `RangeCalc.go`. Build it with `go build RangeCalc.go`.
+- Prebuilt binaries for Windows, Linux and macOS are on the [latest release](https://github.com/JohnDovey/RangeCalc/releases/latest).
 
 ## Usage
 
