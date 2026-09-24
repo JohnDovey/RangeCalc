@@ -17,8 +17,9 @@ permissions:
   contents: write
 
 env:
+  # Not named VERSION: MSBuild would pick that up as $(Version) and break NuGet restore
   # Tag name on a tag push, otherwise e.g. "dev-1a2b3c4" for dry runs
-  VERSION: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || format('dev-{0}', github.sha) }}
+  RELEASE_VERSION: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || format('dev-{0}', github.sha) }}
 
 jobs:
   dotnet:
@@ -44,7 +45,7 @@ jobs:
         with:
           dotnet-version: 10.0.x
       - name: Restore
-        run: dotnet restore "${{ matrix.project }}" -r ${{ matrix.rid }} -p:PublishTrimmed=true -v:detailed
+        run: dotnet restore "${{ matrix.project }}" -r ${{ matrix.rid }} -p:PublishTrimmed=true
       - name: Publish
         run: |
           dotnet publish "${{ matrix.project }}" -c Release -r ${{ matrix.rid }} --no-restore \
@@ -56,7 +57,7 @@ jobs:
           cp "${{ matrix.readme }}" pkg/README.md
       - name: Package
         run: |
-          name="rangecalc-${{ matrix.impl }}-${VERSION}-${{ matrix.rid }}"
+          name="rangecalc-${{ matrix.impl }}-${RELEASE_VERSION}-${{ matrix.rid }}"
           mkdir -p dist
           if [[ "${{ matrix.rid }}" == win-* ]]; then
             (cd pkg && zip -qr "../dist/$name.zip" .)
@@ -93,14 +94,14 @@ jobs:
             rm -rf pkg && mkdir pkg
             (cd RangeCalc.go && go build -trimpath -ldflags "-s -w" -o "../pkg/RangeCalc$ext" RangeCalc.go)
             cp LICENSE pkg/ && cp RangeCalc.go/Readme.md pkg/README.md
-            name="rangecalc-go-${VERSION}-${GOOS}-${GOARCH}"
+            name="rangecalc-go-${RELEASE_VERSION}-${GOOS}-${GOARCH}"
             if [ "$GOOS" = windows ]; then (cd pkg && zip -qr "../dist/$name.zip" .); else tar -czf "dist/$name.tar.gz" -C pkg .; fi
 
             # Go terminal UI (version injected the same way as scripts/build-windows.ps1)
             rm -rf pkg && mkdir pkg
-            (cd RangeCalcCon && go build -trimpath -ldflags "-s -w -X main.version=${VERSION}" -o "../pkg/rangecalccon$ext" .)
+            (cd RangeCalcCon && go build -trimpath -ldflags "-s -w -X main.version=${RELEASE_VERSION}" -o "../pkg/rangecalccon$ext" .)
             cp LICENSE pkg/ && cp RangeCalcCon/README.md pkg/README.md
-            name="rangecalc-tui-${VERSION}-${GOOS}-${GOARCH}"
+            name="rangecalc-tui-${RELEASE_VERSION}-${GOOS}-${GOARCH}"
             if [ "$GOOS" = windows ]; then (cd pkg && zip -qr "../dist/$name.zip" .); else tar -czf "dist/$name.tar.gz" -C pkg .; fi
           done
       - uses: actions/upload-artifact@v4
@@ -142,7 +143,7 @@ jobs:
           cp README.md pkg/README.md
       - name: Package
         run: |
-          name="rangecalc-cpp-${VERSION}-${{ matrix.os }}"
+          name="rangecalc-cpp-${RELEASE_VERSION}-${{ matrix.os }}"
           mkdir -p dist
           if [ "${{ runner.os }}" = Windows ]; then
             7z a -bso0 "dist/$name.zip" ./pkg/*
@@ -172,7 +173,7 @@ jobs:
       - name: Package
         run: |
           mkdir -p ../dist
-          cp app/build/outputs/apk/debug/app-debug.apk "../dist/rangecalc-android-${VERSION}-debug.apk"
+          cp app/build/outputs/apk/debug/app-debug.apk "../dist/rangecalc-android-${RELEASE_VERSION}-debug.apk"
       - uses: actions/upload-artifact@v4
         with:
           name: android
@@ -187,7 +188,7 @@ jobs:
         run: |
           mkdir -p dist
           cp LICENSE HTMLVer/
-          (cd HTMLVer && zip -qr "../dist/rangecalc-html-${VERSION}.zip" .)
+          (cd HTMLVer && zip -qr "../dist/rangecalc-html-${RELEASE_VERSION}.zip" .)
       - uses: actions/upload-artifact@v4
         with:
           name: html
