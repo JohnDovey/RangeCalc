@@ -32,20 +32,26 @@ jobs:
         include:
           - impl: vb
             project: RangeCalcVB/RangeCalcNetCore.vbproj
+            bin: RangeCalcNetCore
             readme: README.md
           - impl: csharp
             project: RangeCalcMac/RangeCalcMac/RangeCalcMac.csproj
+            bin: RangeCalcMac
             readme: RangeCalcMac/Readme.md
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 10.0.x
+      - name: Restore
+        run: dotnet restore "${{ matrix.project }}" -r ${{ matrix.rid }} -p:PublishTrimmed=true
       - name: Publish
         run: |
-          dotnet publish "${{ matrix.project }}" -c Release -r ${{ matrix.rid }} \
+          dotnet publish "${{ matrix.project }}" -c Release -r ${{ matrix.rid }} --no-restore \
             --self-contained -p:PublishSingleFile=true -p:PublishTrimmed=true \
-            -p:EnableCompressionInSingleFile=true -p:DebugType=None -p:AssemblyName=RangeCalc -o pkg
+            -p:EnableCompressionInSingleFile=true -p:DebugType=None -o pkg
+          ext=""; [[ "${{ matrix.rid }}" == win-* ]] && ext=".exe"
+          mv "pkg/${{ matrix.bin }}$ext" "pkg/RangeCalc$ext"
           cp LICENSE pkg/
           cp "${{ matrix.readme }}" pkg/README.md
       - name: Package
@@ -133,7 +139,7 @@ jobs:
             esac
           done
           cp LICENSE pkg/
-          cp RangeCalcCpp/README.md pkg/README.md
+          cp README.md pkg/README.md
       - name: Package
         run: |
           name="rangecalc-cpp-${VERSION}-${{ matrix.os }}"
@@ -160,7 +166,6 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-      - uses: android-actions/setup-android@v3
       - uses: gradle/actions/setup-gradle@v4
       - name: Test and build
         run: bash ./gradlew --no-daemon testDebugUnitTest assembleDebug
