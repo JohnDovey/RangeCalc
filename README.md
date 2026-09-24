@@ -89,13 +89,22 @@ You can also view the result plotted on a map.
 This is experimental.
 
 # Releases
-Added a bunch of releases with the various binaries after GitHub kept whining about it. These predate the 2026 fixes above — no new binary releases have been cut yet since then.
+Grab ready-to-run binaries for every version from the [latest release](https://github.com/JohnDovey/RangeCalc/releases/latest):
 
-- [HTML5](https://github.com/JohnDovey/RangeCalc/releases/tag/html-v0.2) Anything with a browser
-- [GO](https://github.com/JohnDovey/RangeCalc/releases/tag/Go-v0.2) Windows & Linux
-- [Mono](https://github.com/JohnDovey/RangeCalc/releases/tag/Mono-v02) Linux
-- [.NET 5.0 Win](https://github.com/JohnDovey/RangeCalc/releases/tag/Net5.0-v0.2) Windows
-- [.NET 5.0 macOS](https://github.com/JohnDovey/RangeCalc/releases/tag/MAC-Net5.0-v0.2) Mac
+- VB.NET and C# console apps for Windows, Linux and macOS (self-contained, no .NET install needed)
+- Go CLI and Go terminal UI for Windows, Linux and macOS (amd64 + arm64)
+- C++ console app for Windows, Linux and macOS
+- Android debug APK (for sideloading)
+- HTML5/PWA bundle
+
+Releases are built automatically by [GitHub Actions](.github/workflows/release.yml). To cut one, tag a commit and push the tag:
+
+```
+git tag v2.0.0
+git push origin v2.0.0
+```
+
+The older 2021 releases ([Mono](https://github.com/JohnDovey/RangeCalc/releases/tag/Mono-v02), [Go](https://github.com/JohnDovey/RangeCalc/releases/tag/Go-v0.2), [.NET 5.0](https://github.com/JohnDovey/RangeCalc/releases/tag/Net5.0-v0.2), …) predate the 2026 formula fixes.
 
 Hope that covers it :-)
 

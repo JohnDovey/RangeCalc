@@ -1,0 +1,228 @@
+# Builds every RangeCalc implementation and publishes them as one GitHub Release.
+#
+#   Release:  git tag v2.0.0 && git push origin v2.0.0
+#   Dry run:  Actions tab -> "Release" -> Run workflow (builds + uploads artifacts, no release).
+#             Also runs as a dry run on PRs that change this workflow.
+
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  pull_request:
+    paths: ['.github/workflows/release.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  # Tag name on a tag push, otherwise e.g. "dev-1a2b3c4" for dry runs
+  VERSION: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || format('dev-{0}', github.sha) }}
+
+jobs:
+  dotnet:
+    name: .NET (${{ matrix.impl }}, ${{ matrix.rid }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        impl: [vb, csharp]
+        rid: [win-x64, linux-x64, osx-x64, osx-arm64]
+        include:
+          - impl: vb
+            project: RangeCalcVB/RangeCalcNetCore.vbproj
+            readme: README.md
+          - impl: csharp
+            project: RangeCalcMac/RangeCalcMac/RangeCalcMac.csproj
+            readme: RangeCalcMac/Readme.md
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+      - name: Publish
+        run: |
+          dotnet publish "${{ matrix.project }}" -c Release -r ${{ matrix.rid }} \
+            --self-contained -p:PublishSingleFile=true -p:PublishTrimmed=true \
+            -p:EnableCompressionInSingleFile=true -p:DebugType=None -p:AssemblyName=RangeCalc -o pkg
+          cp LICENSE pkg/
+          cp "${{ matrix.readme }}" pkg/README.md
+      - name: Package
+        run: |
+          name="rangecalc-${{ matrix.impl }}-${VERSION}-${{ matrix.rid }}"
+          mkdir -p dist
+          if [[ "${{ matrix.rid }}" == win-* ]]; then
+            (cd pkg && zip -qr "../dist/$name.zip" .)
+          else
+            tar -czf "dist/$name.tar.gz" -C pkg .
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dotnet-${{ matrix.impl }}-${{ matrix.rid }}
+          path: dist/*
+
+  go:
+    name: Go (CLI + TUI)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: RangeCalcCon/go.mod
+          cache-dependency-path: RangeCalcCon/go.sum
+      - name: Test
+        working-directory: RangeCalcCon
+        run: go test ./...
+      - name: Build and package
+        env:
+          CGO_ENABLED: '0'
+        run: |
+          mkdir -p dist
+          for target in windows/amd64 windows/arm64 linux/amd64 linux/arm64 darwin/amd64 darwin/arm64; do
+            export GOOS=${target%/*} GOARCH=${target#*/}
+            ext=""; [ "$GOOS" = windows ] && ext=".exe"
+
+            # Go CLI (single file, standard library only)
+            rm -rf pkg && mkdir pkg
+            (cd RangeCalc.go && go build -trimpath -ldflags "-s -w" -o "../pkg/RangeCalc$ext" RangeCalc.go)
+            cp LICENSE pkg/ && cp RangeCalc.go/Readme.md pkg/README.md
+            name="rangecalc-go-${VERSION}-${GOOS}-${GOARCH}"
+            if [ "$GOOS" = windows ]; then (cd pkg && zip -qr "../dist/$name.zip" .); else tar -czf "dist/$name.tar.gz" -C pkg .; fi
+
+            # Go terminal UI (version injected the same way as scripts/build-windows.ps1)
+            rm -rf pkg && mkdir pkg
+            (cd RangeCalcCon && go build -trimpath -ldflags "-s -w -X main.version=${VERSION}" -o "../pkg/rangecalccon$ext" .)
+            cp LICENSE pkg/ && cp RangeCalcCon/README.md pkg/README.md
+            name="rangecalc-tui-${VERSION}-${GOOS}-${GOARCH}"
+            if [ "$GOOS" = windows ]; then (cd pkg && zip -qr "../dist/$name.zip" .); else tar -czf "dist/$name.tar.gz" -C pkg .; fi
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: go
+          path: dist/*
+
+  cpp:
+    name: C++ (${{ matrix.os }})
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-x64
+            runner: windows-latest
+          - os: linux-x64
+            runner: ubuntu-latest
+          - os: macos-universal
+            runner: macos-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ilammy/msvc-dev-cmd@v1
+        if: runner.os == 'Windows'
+      - name: Build
+        run: |
+          mkdir -p pkg
+          for f in RangeCalc PercCalc; do
+            case "${{ runner.os }}" in
+              Windows) cl -nologo -O2 -EHsc -std:c++17 "RangeCalcCpp/$f.cpp" -Fe:"pkg/$f.exe" -Fo:"pkg/" && rm -f pkg/*.obj ;;
+              Linux)   g++ -O2 -std=c++17 -static-libstdc++ -static-libgcc -o "pkg/$f" "RangeCalcCpp/$f.cpp" ;;
+              macOS)   clang++ -O2 -std=c++17 -arch x86_64 -arch arm64 -o "pkg/$f" "RangeCalcCpp/$f.cpp" ;;
+            esac
+          done
+          cp LICENSE pkg/
+          cp RangeCalcCpp/README.md pkg/README.md
+      - name: Package
+        run: |
+          name="rangecalc-cpp-${VERSION}-${{ matrix.os }}"
+          mkdir -p dist
+          if [ "${{ runner.os }}" = Windows ]; then
+            7z a -bso0 "dist/$name.zip" ./pkg/*
+          else
+            tar -czf "dist/$name.tar.gz" -C pkg .
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cpp-${{ matrix.os }}
+          path: dist/*
+
+  android:
+    name: Android (debug APK)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: RangeCalcAndroid
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Test and build
+        run: bash ./gradlew --no-daemon testDebugUnitTest assembleDebug
+      - name: Package
+        run: |
+          mkdir -p ../dist
+          cp app/build/outputs/apk/debug/app-debug.apk "../dist/rangecalc-android-${VERSION}-debug.apk"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android
+          path: dist/*
+
+  html:
+    name: HTML / PWA
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Package
+        run: |
+          mkdir -p dist
+          cp LICENSE HTMLVer/
+          (cd HTMLVer && zip -qr "../dist/rangecalc-html-${VERSION}.zip" .)
+      - uses: actions/upload-artifact@v4
+        with:
+          name: html
+          path: dist/*
+
+  release:
+    name: Publish release
+    needs: [dotnet, go, cpp, android, html]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - name: Checksums
+        run: |
+          cd dist
+          sha256sum * > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: all-release-assets
+          path: dist/*
+      - uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: dist/*
+          generate_release_notes: true
+          body: |
+            Binaries for every RangeCalc implementation. Pick the one for your platform:
+
+            | Asset prefix | What it is |
+            |---|---|
+            | `rangecalc-vb-*` | VB.NET console app (self-contained, no .NET install needed) |
+            | `rangecalc-csharp-*` | C# console app, originally the macOS version (self-contained) |
+            | `rangecalc-go-*` | Go CLI — interactive, or non-interactive with `-b1 -b2 -d [-bp] [-o file]` |
+            | `rangecalc-tui-*` | Go keyboard-driven terminal UI with calculation history |
+            | `rangecalc-cpp-*` | Original C++ console app (+ PercCalc) |
+            | `rangecalc-android-*-debug.apk` | Android app (debug-signed, for sideloading) |
+            | `rangecalc-html-*` | HTML5/PWA version — or just use https://johndovey.github.io/RangeCalc/ |
+
+            macOS binaries are unsigned: if Gatekeeper blocks one, run `xattr -d com.apple.quarantine <file>`.
+            Verify downloads with `SHA256SUMS.txt`.
