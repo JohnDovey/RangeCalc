@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { width:1280px; height:640px; overflow:hidden; }
+  body { font-family:'Inter', sans-serif; }
+
+  .card {
+    position:relative;
+    width:1280px; height:640px;
+    background: linear-gradient(180deg, #F6D39A 0%, #F0AE6E 32%, #E4905C 52%, #C97650 62%, #93542F 100%);
+    overflow:hidden;
+  }
+
+  /* sun glow */
+  .sun {
+    position:absolute; left:565px; top:110px; width:300px; height:300px;
+    background: radial-gradient(circle, rgba(255,241,214,0.85) 0%, rgba(255,220,170,0.35) 45%, rgba(255,220,170,0) 72%);
+    border-radius:50%;
+  }
+
+  /* far dunes */
+  .dune-far {
+    position:absolute; left:-40px; top:370px; width:1360px; height:120px;
+    background:#B87F4E; opacity:0.55;
+    clip-path: polygon(0% 100%, 0% 40%, 10% 30%, 24% 42%, 40% 22%, 58% 40%, 74% 20%, 90% 38%, 100% 28%, 100% 100%);
+  }
+
+  /* ground */
+  .ground {
+    position:absolute; left:0; top:418px; width:1280px; height:222px;
+    background: linear-gradient(180deg, #A9764A 0%, #7C5230 55%, #5C3B22 100%);
+  }
+  .ground::before{
+    content:""; position:absolute; left:0; top:-14px; width:1280px; height:28px;
+    background:#A9764A; clip-path: polygon(0 60%, 6% 30%, 14% 55%, 24% 20%, 34% 50%, 46% 15%, 58% 48%, 70% 22%, 82% 52%, 92% 18%, 100% 45%, 100% 100%, 0 100%);
+  }
+
+  .wordmark {
+    position:absolute; left:64px; top:66px; z-index:5;
+  }
+  .wordmark .brand {
+    font-size:58px; font-weight:800; color:#12253A; letter-spacing:-1.5px;
+    text-shadow: 0 2px 0 rgba(255,255,255,0.25);
+  }
+  .wordmark .accent { color:#1B6E4E; }
+  .wordmark .bar { width:74px; height:6px; background:#1B6E4E; border-radius:3px; margin:10px 0 14px; }
+  .wordmark .tag {
+    font-size:21px; font-weight:500; color:#3A2515; opacity:0.88; max-width:520px; line-height:1.45;
+  }
+
+  .platforms {
+    position:absolute; left:64px; top:566px; z-index:5;
+    font-size:14px; font-weight:600; letter-spacing:2.2px; color:#3A2515; opacity:0.65;
+    text-transform:uppercase;
+  }
+
+  /* phone mockup */
+  .phone-wrap{
+    position:absolute; right:104px; top:46px; width:336px; height:560px;
+    transform: rotate(-5deg);
+    filter: drop-shadow(0 30px 46px rgba(20,10,0,0.45));
+    z-index:6;
+  }
+  .phone-bezel{
+    position:absolute; inset:0;
+    background:#0E2436; border-radius:38px;
+    padding:12px;
+  }
+  .phone-screen{
+    width:100%; height:100%; border-radius:28px; overflow:hidden;
+    background:#000;
+  }
+  .phone-screen img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .phone-notch{
+    position:absolute; left:50%; top:0; transform:translateX(-50%);
+    width:120px; height:22px; background:#0E2436; border-radius:0 0 14px 14px; z-index:2;
+  }
+
+  svg.scene { position:absolute; left:0; top:0; width:1280px; height:640px; z-index:3; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="sun"></div>
+    <div class="dune-far"></div>
+    <div class="ground"></div>
+
+    <svg class="scene" viewBox="0 0 1280 640" xmlns="http://www.w3.org/2000/svg">
+      <!-- subtle compass rose watermark -->
+      <g transform="translate(700,300)" opacity="0.10" stroke="#FFF8EA" stroke-width="3" fill="none">
+        <circle r="185"/>
+        <circle r="130"/>
+        <line x1="0" y1="-215" x2="0" y2="215"/>
+        <line x1="-215" y1="0" x2="215" y2="0"/>
+        <line x1="-152" y1="-152" x2="152" y2="152"/>
+        <line x1="-152" y1="152" x2="152" y2="-152"/>
+      </g>
+
+      <!-- distant vehicle silhouette (the "technical"), beyond the wire -->
+      <g transform="translate(800,362) scale(0.8)" fill="#3B2416" opacity="0.92">
+        <rect x="-34" y="-16" width="68" height="16" rx="2"/>
+        <rect x="-20" y="-27" width="30" height="13" rx="2"/>
+        <rect x="-6" y="-38" width="10" height="13" rx="1"/>
+        <circle cx="-20" cy="1" r="7"/>
+        <circle cx="18" cy="1" r="7"/>
+      </g>
+
+      <!-- perimeter fence with barbed wire, foreground -->
+      <g transform="translate(0,388)">
+        <rect x="0" y="0" width="760" height="70" fill="#1B120A" opacity="0.30"/>
+        <!-- chain-link lattice -->
+        <g stroke="#1B120A" stroke-width="1.4" opacity="0.42">
+          <path d="M0,0 L34,70 M0,70 L34,0 M34,0 L68,70 M34,70 L68,0 M68,0 L102,70 M68,70 L102,0
+                   M102,0 L136,70 M102,70 L136,0 M136,0 L170,70 M136,70 L170,0
+                   M170,0 L204,70 M170,70 L204,0 M204,0 L238,70 M204,70 L238,0
+                   M238,0 L272,70 M238,70 L272,0 M272,0 L306,70 M272,70 L306,0
+                   M306,0 L340,70 M306,70 L340,0 M340,0 L374,70 M340,70 L374,0
+                   M374,0 L408,70 M374,70 L408,0 M408,0 L442,70 M408,70 L442,0
+                   M442,0 L476,70 M442,70 L476,0 M476,0 L510,70 M476,70 L510,0
+                   M510,0 L544,70 M510,70 L544,0 M544,0 L578,70 M544,70 L578,0
+                   M578,0 L612,70 M578,70 L612,0 M612,0 L646,70 M612,70 L646,0
+                   M646,0 L680,70 M646,70 L680,0 M680,0 L714,70 M680,70 L714,0
+                   M714,0 L748,70 M714,70 L748,0"/>
+        </g>
+        <!-- posts -->
+        <rect x="0" y="-14" width="8" height="84" fill="#1B120A"/>
+        <rect x="248" y="-14" width="8" height="84" fill="#1B120A"/>
+        <rect x="496" y="-14" width="8" height="84" fill="#1B120A"/>
+        <rect x="744" y="-14" width="8" height="84" fill="#1B120A"/>
+        <!-- barbed wire -->
+        <path d="M0,-14 Q30,-30 60,-14 T120,-14 T180,-14 T240,-14 T300,-14 T360,-14 T420,-14 T480,-14 T540,-14 T600,-14 T660,-14 T720,-14 T760,-14"
+              fill="none" stroke="#1B120A" stroke-width="2" opacity="0.55"/>
+        <g stroke="#1B120A" stroke-width="1.6" opacity="0.55">
+          <line x1="60" y1="-26" x2="52" y2="-18"/><line x1="60" y1="-26" x2="68" y2="-18"/>
+          <line x1="180" y1="-26" x2="172" y2="-18"/><line x1="180" y1="-26" x2="188" y2="-18"/>
+          <line x1="300" y1="-26" x2="292" y2="-18"/><line x1="300" y1="-26" x2="308" y2="-18"/>
+          <line x1="420" y1="-26" x2="412" y2="-18"/><line x1="420" y1="-26" x2="428" y2="-18"/>
+          <line x1="540" y1="-26" x2="532" y2="-18"/><line x1="540" y1="-26" x2="548" y2="-18"/>
+          <line x1="660" y1="-26" x2="652" y2="-18"/><line x1="660" y1="-26" x2="668" y2="-18"/>
+        </g>
+      </g>
+
+      <!-- dashed bearing sight line, compass to target -->
+      <path d="M696,128 L800,362" stroke="#FFF6E4" stroke-width="2.5" stroke-dasharray="2 9" stroke-linecap="round" opacity="0.85"/>
+      <circle cx="800" cy="362" r="4.5" fill="#FFF6E4" opacity="0.9"/>
+
+      <!-- watchtower -->
+      <g transform="translate(560,0)">
+        <!-- legs -->
+        <path d="M40,150 L-20,420 M100,150 L160,420 M40,180 L160,150 M-20,300 L200,260" stroke="#12253A" stroke-width="9" stroke-linecap="round" fill="none"/>
+        <path d="M100,150 L-20,420 M40,150 L160,420" stroke="#12253A" stroke-width="9" stroke-linecap="round" fill="none"/>
+        <!-- cross braces -->
+        <path d="M10,220 L130,340 M130,220 L10,340" stroke="#12253A" stroke-width="6" stroke-linecap="round" fill="none" opacity="0.9"/>
+        <!-- ladder -->
+        <path d="M70,150 L70,420" stroke="#12253A" stroke-width="5"/>
+        <path d="M55,180 L85,180 M55,220 L85,220 M55,260 L85,260 M55,300 L85,300 M55,340 L85,340 M55,380 L85,380" stroke="#12253A" stroke-width="5"/>
+        <!-- platform -->
+        <rect x="-30" y="130" width="190" height="18" rx="3" fill="#12253A"/>
+        <!-- cabin -->
+        <rect x="-14" y="46" width="158" height="86" rx="4" fill="#12253A"/>
+        <rect x="0" y="60" width="46" height="40" rx="2" fill="#F0AE6E" opacity="0.55"/>
+        <rect x="84" y="60" width="46" height="40" rx="2" fill="#F0AE6E" opacity="0.55"/>
+        <!-- roof -->
+        <path d="M-24,46 L65,10 L154,46 Z" fill="#12253A"/>
+        <!-- rail -->
+        <rect x="-30" y="118" width="190" height="7" fill="#12253A"/>
+        <path d="M-24,118 L-24,148 M15,118 L15,148 M55,118 L55,148 M95,118 L95,148 M135,118 L135,148 M155,118 L155,148" stroke="#12253A" stroke-width="4"/>
+      </g>
+
+      <!-- figure sighting with a compass -->
+      <g transform="translate(636,112)" fill="#0C1B2B">
+        <circle cx="0" cy="10" r="13"/>
+        <path d="M-15,34 C-15,20 -19,20 -19,58 L-19,96 L19,96 L19,58 C19,20 15,20 15,34 Z"/>
+        <!-- raised arm holding compass -->
+        <path d="M13,42 C34,40 48,34 55,20" stroke="#0C1B2B" stroke-width="9" stroke-linecap="round" fill="none"/>
+        <circle cx="60" cy="16" r="9" fill="none" stroke="#0C1B2B" stroke-width="4"/>
+        <line x1="60" y1="16" x2="66" y2="8" stroke="#1B6E4E" stroke-width="3" stroke-linecap="round"/>
+        <!-- other arm resting on rail -->
+        <path d="M-13,44 C-26,50 -30,60 -28,70" stroke="#0C1B2B" stroke-width="9" stroke-linecap="round" fill="none"/>
+      </g>
+    </svg>
+
+    <div class="wordmark">
+      <div class="brand">Range<span class="accent">Calc</span></div>
+      <div class="bar"></div>
+      <div class="tag">Estimate range to a target from two compass<br>bearings and a baseline distance.</div>
+    </div>
+
+    <div class="platforms">VB.NET &nbsp;·&nbsp; C++ &nbsp;·&nbsp; Go &nbsp;·&nbsp; HTML5 &nbsp;·&nbsp; macOS &nbsp;·&nbsp; Android</div>
+
+    <div class="phone-wrap">
+      <div class="phone-notch"></div>
+      <div class="phone-bezel">
+        <div class="phone-screen"><img src="screenshot.jpeg"></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
