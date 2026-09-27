@@ -61,6 +61,7 @@ android {
 
 dependencies {
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.splashscreen)
     implementation(libs.lifecycle.runtime.ktx)
 
     // Compose

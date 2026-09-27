@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Matches RangeCalcBlue in ui/theme/Theme.kt -->
+    <color name="rangecalc_blue">#123C69</color>
+</resources>

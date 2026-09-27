@@ -1,10 +1,11 @@
 /* RangeCalc GPS — offline app shell + Bootstrap + Leaflet (map tiles still need network) */
-const CACHE = 'range-calc-gps-v1';
+const CACHE = 'range-calc-gps-v2';
 const SHELL = new URL('./RangeCalcGPS.html', self.location).href;
 const ASSETS = [
   './RangeCalcGPS.html',
   './range-calc-gps.webmanifest',
   './icon.svg',
+  './splash.png',
   'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css',
   'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js',
   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
@@ -44,7 +45,8 @@ function shouldRuntimeCache(url) {
   if (
     url.pathname.endsWith('RangeCalcGPS.html') ||
     url.pathname.endsWith('range-calc-gps.webmanifest') ||
-    url.pathname.endsWith('icon.svg')
+    url.pathname.endsWith('icon.svg') ||
+    url.pathname.endsWith('splash.png')
   ) {
     return true;
   }

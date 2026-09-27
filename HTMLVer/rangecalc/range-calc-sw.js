@@ -1,10 +1,11 @@
 /* RangeCalc Standard — offline shell + CDN asset cache */
-const CACHE = 'range-calc-standard-v2';
+const CACHE = 'range-calc-standard-v3';
 const SHELL = new URL('./RangeCalc.html', self.location).href;
 const ASSETS = [
   './RangeCalc.html',
   './range-calc.webmanifest',
   './icon.svg',
+  './splash.png',
   'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css',
   'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js',
 ];
@@ -50,7 +51,8 @@ self.addEventListener('fetch', (event) => {
             const samePath =
               url.pathname.endsWith('RangeCalc.html') ||
               url.pathname.endsWith('range-calc.webmanifest') ||
-              url.pathname.endsWith('icon.svg');
+              url.pathname.endsWith('icon.svg') ||
+              url.pathname.endsWith('splash.png');
             const cdn =
               url.hostname === 'cdn.jsdelivr.net' &&
               url.pathname.includes('/bootstrap@5.3.3/');
