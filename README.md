@@ -1,4 +1,7 @@
 # RangeCalc
+
+![RangeCalc](social-preview.png)
+
 A range-to-target calculator from two compass bearings and a baseline distance — what started as an attempt to recreate my Range Calculator as a .NET Core app now has more versions than any one calculator reasonably needs: VB.NET, C++, Go (CLI + terminal UI), HTML5, macOS, and Android.
 
 ## Origin
